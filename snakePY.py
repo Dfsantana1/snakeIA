@@ -47,21 +47,44 @@ def go_right():
         head.direction = "right"
 
 def move():
+    x = head.xcor()
+    y = head.ycor()
+
+    if abs(x - food.xcor()) > abs(y - food.ycor()):
+        if x < food.xcor():
+            head.direction = "right"
+        else:
+            head.direction = "left"
+    else:
+        if y < food.ycor():
+            head.direction = "up"
+        else:
+            head.direction = "down"
+
     if head.direction == "up":
-        y = head.ycor()
-        head.sety(y + 20)
-
-    if head.direction == "down":
-        y = head.ycor()
-        head.sety(y - 20)
-
-    if head.direction == "left":
-        x = head.xcor()
-        head.setx(x - 20)
-
-    if head.direction == "right":
-        x = head.xcor()
-        head.setx(x + 20)
+        if y < 290:
+            head.sety(y + 20)
+        else:
+            head.direction = "down"
+            head.sety(y - 20)
+    elif head.direction == "down":
+        if y > -290:
+            head.sety(y - 20)
+        else:
+            head.direction = "up"
+            head.sety(y + 20)
+    elif head.direction == "left":
+        if x > -290:
+            head.setx(x - 20)
+        else:
+            head.direction = "right"
+            head.setx(x + 20)
+    elif head.direction == "right":
+        if x < 290:
+            head.setx(x + 20)
+        else:
+            head.direction = "left"
+            head.setx(x - 20)
 
 # Teclado
 wn.listen()
