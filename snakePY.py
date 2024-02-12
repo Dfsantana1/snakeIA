@@ -49,17 +49,33 @@ def go_right():
 def move():
     x = head.xcor()
     y = head.ycor()
-
+    
+    # Variable para almacenar la dirección actual del movimiento
+    current_direction = head.direction
+    
     if abs(x - food.xcor()) > abs(y - food.ycor()):
         if x < food.xcor():
-            head.direction = "right"
+            new_direction = "right"
         else:
-            head.direction = "left"
+            new_direction = "left"
     else:
         if y < food.ycor():
-            head.direction = "up"
+            new_direction = "up"
         else:
-            head.direction = "down"
+            new_direction = "down"
+    
+    # Verificar si la nueva dirección es opuesta a la dirección actual
+    if (current_direction == "up" and new_direction == "down") or \
+       (current_direction == "down" and new_direction == "up") or \
+       (current_direction == "left" and new_direction == "right") or \
+       (current_direction == "right" and new_direction == "left"):
+        # Cambiar de eje
+        if current_direction in ["up", "down"]:
+            new_direction = "left" if x > food.xcor() else "right"
+        else:
+            new_direction = "up" if y > food.ycor() else "down"
+    
+    head.direction = new_direction
 
     if head.direction == "up":
         if y < 290:
@@ -151,14 +167,11 @@ while True:
             head.goto(0,0)
             head.direction = "stop"
         
-            # Esconder los segmentos
             for segment in segments:
                 segment.goto(1000, 1000)
         
-            # Limpiar la lista de segmentos
             segments.clear()
 
-            # Resetear el marcador
             score = 0
 
     time.sleep(delay)
